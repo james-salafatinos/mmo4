@@ -5,16 +5,22 @@
   "main": "server/server.js",
   "type": "module",
   "scripts": {
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+    "test:gui": "http-server ./client -o /admin/ecs-test.html"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
+    "connect-pg-simple": "^10.0.0",
     "dotenv": "^16.5.0",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
+    "pg": "^8.16.3",
     "socket.io": "^4.8.1",
     "three": "^0.177.0",
     "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
   }
 }
