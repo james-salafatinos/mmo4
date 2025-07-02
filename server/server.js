@@ -6,22 +6,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import session from 'express-session';
-import SQLiteStoreFactory from 'connect-sqlite3';
 import dotenv from 'dotenv';
-import { initGoldModule, goldStatements } from './db/gold.js';
-
-// Import modules
-import config from './config/index.js';
-import { db } from './db/index.js';
-import createRouter from './routes/index.js';
-import { initSocketHandlers, activeTrades } from './socket/index.js';
-import { initDebugHandlers } from './socket/debug.js';
-import { initializeWorldItems } from './utils/worldItems.js';
-import chunkManager from './config/chunks.js';
-import initChunkHandlers from './socket/chunks.js';
-import { initResourceHandlers } from './socket/resources.js';
-import { initShops, initShopHandlers } from './socket/shops.js';
 
 // Load environment variables
 dotenv.config();
@@ -38,68 +23,16 @@ const io = new Server(httpServer);
 // Make io available to routes
 app.set('io', io);
 
-// Set up middleware
-app.use(express.static(join(__dirname, '../public')));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Serve static files from the 'client' directory
+app.use(express.static(join(__dirname, '../client')));
 
-//Need to implement session middleware for postgres
-
-
-
-// Set up session middleware
-const SQLiteStore = SQLiteStoreFactory(session);
-app.use(session({
-  store: new SQLiteStore({ db: 'sessions.db', dir: __dirname }),
-  secret: config.session.secret,
-  resave: config.session.resave,
-  saveUninitialized: config.session.saveUninitialized,
-  cookie: config.session.cookie
-}));
-
-// Track connected players and world items
-const players = new Map();
-
-// Route for debug page
-app.get('/debug', (req, res) => {
-  res.sendFile(join(__dirname, '../public/debug.html'));
+// Route for the main page
+app.get('/', (req, res) => {
+  res.sendFile(join(__dirname, '../client/views/index.html'));
 });
 
-// Initialize world items
-const worldItems = initializeWorldItems();
-
-// Initialize world chunks
-console.log('Loading world chunks...');
-const availableChunks = chunkManager.listAllChunks();
-console.log(`Found ${availableChunks.length} pre-defined chunks`);
-
-// Create and mount API routes with players and worldItems access
-const router = createRouter(players, worldItems, chunkManager);
-app.use('/api', router);
-
-// Initialize socket handlers
-initSocketHandlers(io, players, worldItems);
-
-// Initialize debug socket handlers
-initDebugHandlers(io, players, worldItems);
-
-// Initialize chunk handlers
-initChunkHandlers(io, chunkManager);
-
-// Initialize resource handlers
-initResourceHandlers(io, players);
-
-// Initialize gold module with db instance
-try {
-  initGoldModule(db);
-  console.log('Gold system initialized successfully');
-} catch (error) {
-  console.error('Error initializing gold system:', error);
-}
-
-// Initialize shop system
-initShops();
-initShopHandlers(io, players);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Start the server
 const PORT = process.env.PORT || 3000;

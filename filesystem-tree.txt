@@ -7,7 +7,10 @@ mmo4/
 │   │   ├── ecs-test.html
 │   │   └── ecs-test.js
 │   ├── auth/
+│   ├── css/
+│   │   └── style.css
 │   ├── game/
+│   │   ├── app.js
 │   │   ├── chat/
 │   │   ├── ecs/
 │   │   │   ├── components/
@@ -22,18 +25,25 @@ mmo4/
 │   │   │   │   └── world.js
 │   │   │   ├── entities/
 │   │   │   └── systems/
+│   │   │       ├── index.js
+│   │   │       ├── RenderSystem.js
+│   │   │       └── TransformLoggerSystem.js
 │   │   ├── inventory/
 │   │   ├── levels/
 │   │   ├── minimap/
 │   │   ├── moderator/
 │   │   ├── npc/
-│   │   └── player/
+│   │   ├── player/
+│   │   └── three-setup.js
 │   ├── icons/
 │   ├── models/
 │   ├── modules/
+│   │   ├── OrbitControls.js
 │   │   ├── three.core.js
 │   │   └── three.module.js
-│   └── services/
+│   ├── services/
+│   └── views/
+│       └── index.html
 ├── filesystem-tree.txt
 ├── FileSystemToText-CardsUtility.py
 ├── FileSystemToTextUtility.py

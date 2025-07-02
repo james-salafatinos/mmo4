@@ -212,6 +212,7 @@ export class World {
      * @param {number} currentTime - Current time in seconds
      */
     update(currentTime) {
+        console.log("World: Updating");
         if (!this.running) return;
 
         const deltaTime = this.lastUpdateTime === 0 ?
