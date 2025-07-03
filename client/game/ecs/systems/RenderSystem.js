@@ -1,8 +1,8 @@
 // ECS Systems
 // Systems contain logic that operates on entities with specific components
 
-import { System } from '../core/index.js';
-import { render} from '../../three-setup.js';
+import { System } from '/shared/core/index.js';
+import { render } from '../../three-setup.js';
 
 
 /**
@@ -11,11 +11,9 @@ import { render} from '../../three-setup.js';
  */
 export class RenderSystem extends System {
     constructor(scene) {
-        console.log("RenderSystem: Constructed");
         super();
         this.requiredComponents = ['TransformComponent'];
         this.scene = scene;
-        console.log("RenderSystem:", scene);
       
     }
 
@@ -24,7 +22,7 @@ export class RenderSystem extends System {
      * @param {World} world - The world this system belongs to
      */
     init(world) {
-        console.log("RenderSystem: Initialized");
+
         for (const entity of world.entities) {
             if (this.matchesEntity(entity)) {
                 const meshComponent = entity.getComponent('MeshComponent');
@@ -34,6 +32,7 @@ export class RenderSystem extends System {
                 }
             }
         }
+        console.log("RenderSystem: Initialized");
     }
 
     /**
@@ -74,7 +73,7 @@ export class RenderSystem extends System {
                     // Remove from scene
                     this.scene.remove(meshComponent.mesh);
                     meshComponent.addedToScene = false;
-                    console.log('RenderSystem: Removed deactivated entity mesh from scene');
+                   
                 }
             }
         }

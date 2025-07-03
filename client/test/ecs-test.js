@@ -1,12 +1,11 @@
-import { World, Entity } from '../game/ecs/core/index.js';
-import { TransformComponent, InteractableComponent } from '../game/ecs/components/index.js';
+import { World, Entity } from '/shared/core/index.js';
+import { TransformComponent } from '/shared/components/index.js';
 import { TransformLoggerSystem } from '../game/ecs/systems/TransformLoggerSystem.js';
 
 // --- Components and Systems for Testing ---
 
 const availableComponents = {
     TransformComponent,
-    InteractableComponent
 };
 
 const availableSystems = {
@@ -29,7 +28,7 @@ const systemDropdown = document.getElementById('system-dropdown');
 const registerSystemBtn = document.getElementById('register-system-btn');
 const runWorldBtn = document.getElementById('run-world-btn');
 
-const logOutput = document.getElementById('log-output');
+const logOutput = document.getElementById('ecs-log-output');
 
 // --- State ---
 let world = null;

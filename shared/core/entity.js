@@ -1,5 +1,3 @@
-import * as THREE from '../../../modules/three.module.js';
-
 /**
  * Entity Class
  * Entities are containers for components

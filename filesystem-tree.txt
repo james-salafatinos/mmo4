@@ -2,10 +2,6 @@ Directory tree for: C:\Users\james\OneDrive\Desktop\repos\mmo4
 ──────────────────────────────────────────────────────────────
 mmo4/
 ├── client/
-│   ├── admin/
-│   │   ├── ecs-test.css
-│   │   ├── ecs-test.html
-│   │   └── ecs-test.js
 │   ├── auth/
 │   ├── css/
 │   │   └── style.css
@@ -14,15 +10,7 @@ mmo4/
 │   │   ├── chat/
 │   │   ├── ecs/
 │   │   │   ├── components/
-│   │   │   │   ├── index.js
-│   │   │   │   ├── InteractableComponent.js
-│   │   │   │   └── TransformComponent.js
-│   │   │   ├── core/
-│   │   │   │   ├── component.js
-│   │   │   │   ├── entity.js
-│   │   │   │   ├── index.js
-│   │   │   │   ├── system.js
-│   │   │   │   └── world.js
+│   │   │   │   └── index.js
 │   │   │   ├── entities/
 │   │   │   └── systems/
 │   │   │       ├── index.js
@@ -35,13 +23,14 @@ mmo4/
 │   │   ├── npc/
 │   │   ├── player/
 │   │   └── three-setup.js
-│   ├── icons/
+│   ├── img/
+│   │   └── favicon.ico
 │   ├── models/
-│   ├── modules/
-│   │   ├── OrbitControls.js
-│   │   ├── three.core.js
-│   │   └── three.module.js
-│   ├── services/
+│   ├── test/
+│   │   ├── ecs-test.js
+│   │   ├── socket-test.js
+│   │   ├── test.css
+│   │   └── test.html
 │   └── views/
 │       └── index.html
 ├── filesystem-tree.txt
@@ -49,10 +38,39 @@ mmo4/
 ├── FileSystemToTextUtility.py
 ├── package-lock.json
 ├── package.json
-└── server/
-    ├── db/
+├── server/
+│   ├── db/
+│   │   ├── index.js
+│   │   └── postgres_schema.sql
+│   ├── server.js
+│   ├── services/
+│   ├── socket/
+│   │   ├── config/
+│   │   │   └── socketConfig.js
+│   │   ├── handlers/
+│   │   │   ├── chatHandlers.js
+│   │   │   ├── playerHandlers.js
+│   │   │   └── worldHandlers.js
+│   │   ├── index.js
+│   │   ├── managers/
+│   │   │   └── roomManager.js
+│   │   ├── middleware/
+│   │   │   └── socketMiddleware.js
+│   │   └── utils/
+│   │       └── eventEmitter.js
+│   └── world/
+└── shared/
+    ├── components/
     │   ├── index.js
-    │   └── postgres_schema.sql
-    ├── server.js
-    ├── services/
-    └── world/
+    │   └── TransformComponent.js
+    ├── core/
+    │   ├── component.js
+    │   ├── entity.js
+    │   ├── index.js
+    │   ├── system.js
+    │   └── world.js
+    └── modules/
+        ├── OrbitControls.js
+        ├── socket.esm.min.js
+        ├── three.core.js
+        └── three.module.js

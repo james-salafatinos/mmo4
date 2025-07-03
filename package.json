@@ -5,8 +5,7 @@
   "main": "server/server.js",
   "type": "module",
   "scripts": {
-    "start": "node server/server.js",
-    "test:gui": "http-server ./client -o /admin/ecs-test.html"
+    "start": "node server/server.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

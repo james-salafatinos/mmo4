@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMO4 Test Suite</title>
+    <link rel="stylesheet" href="/test/test.css">
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .panel {
+            flex: 1;
+            min-width: 300px;
+            margin: 10px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .chat-area {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: white;
+        }
+        .message {
+            margin-bottom: 8px;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        .message.self {
+            background-color: #e3f2fd;
+            text-align: right;
+        }
+        .message.other {
+            background-color: #f1f1f1;
+        }
+        .message.system {
+            background-color: #fff9c4;
+            font-style: italic;
+        }
+        .input-group {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .input-group input {
+            flex: 1;
+            padding: 8px;
+            margin-right: 5px;
+        }
+        .room-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .room-list li {
+            padding: 5px;
+            margin: 2px 0;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .room-list li:hover {
+            background-color: #e0e0e0;
+        }
+        .room-list li.active {
+            background-color: #bbdefb;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        .tab {
+            padding: 8px 15px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: #e3f2fd;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>MMO4 Test Suite</h1>
+
+    <div class="tabs">
+        <div class="tab active" data-tab="ecs">ECS Test</div>
+        <div class="tab" data-tab="connection">Socket Connection</div>
+        <div class="tab" data-tab="player">Player</div>
+        <div class="tab" data-tab="chat">Chat</div>
+        <div class="tab" data-tab="world">World</div>
+    </div>
+
+    <!-- ECS Test Content -->
+    <div id="ecs-tab" class="tab-content active">
+        <div class="container">
+            <div class="controls panel">
+                <h2>ECS Controls</h2>
+                <button id="create-world-btn">Create World</button>
+                <hr>
+                <div id="world-controls" class="hidden">
+                    <h3>World: <span id="world-name"></span></h3>
+                    
+                    <h4>Entities</h4>
+                    <select id="entity-dropdown">
+                        <option value="" disabled selected>Select Entity Type</option>
+                        <option value="Player">Player</option>
+                        <option value="Monster">Monster</option>
+                        <option value="Item">Item</option>
+                    </select>
+                    <button id="add-entity-btn">Add Entity</button>
+
+                    <h4>Components</h4>
+                    <select id="component-dropdown">
+                        <option value="" disabled selected>Select Component</option>
+                        <option value="TransformComponent">TransformComponent</option>
+                        <option value="InteractableComponent">InteractableComponent</option>
+                    </select>
+                    <select id="entity-target-dropdown" disabled>
+                        <option value="" disabled selected>Select Target Entity</option>
+                    </select>
+                    <button id="add-component-btn" disabled>Add Component to Entity</button>
+
+                    <h4>Systems</h4>
+                    <select id="system-dropdown">
+                        <option value="" disabled selected>Select System</option>
+                        <option value="TransformLoggerSystem">TransformLoggerSystem</option>
+                    </select>
+                    <button id="register-system-btn">Register System</button>
+
+                    <h4>World Execution</h4>
+                    <button id="run-world-btn">Run World</button>
+                </div>
+            </div>
+
+            <div class="logs panel">
+                <h2>ECS Logs</h2>
+                <pre id="ecs-log-output"></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Socket Test Content -->
+    <div id="connection-tab" class="tab-content">
+        <div class="container">
+            <div class="panel">
+                <h2>Connection</h2>
+                <div>
+                    <button id="connect-btn">Connect to Server</button>
+                    <button id="disconnect-btn" disabled>Disconnect</button>
+                </div>
+                <div>
+                    <h3>Connection Status</h3>
+                    <div id="connection-status">Disconnected</div>
+                </div>
+                <div>
+                    <h3>Socket ID</h3>
+                    <div id="socket-id">Not connected</div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Room Management</h2>
+                <div>
+                    <h3>Available Rooms</h3>
+                    <ul id="room-list" class="room-list"></ul>
+                </div>
+                <div>
+                    <h3>Current Room</h3>
+                    <div id="current-room">None</div>
+                    <button id="join-room-btn">Join Selected Room</button>
+                </div>
+                <div>
+                    <h3>Players in Room</h3>
+                    <ul id="players-list" class="room-list"></ul>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Socket Logs</h2>
+                <button id="clear-logs-btn">Clear Logs</button>
+                <pre id="socket-log-output" style="height: 500px; overflow-y: auto;"></pre>
+            </div>
+        </div>
+    </div>
+
+    <div id="player-tab" class="tab-content">
+        <div class="container">
+            <div class="panel">
+                <h2>Player Controls</h2>
+                <div>
+                    <h3>Movement</h3>
+                    <div class="input-group">
+                        <input type="number" id="pos-x" placeholder="X" value="0" step="1">
+                        <input type="number" id="pos-y" placeholder="Y" value="0" step="1">
+                        <input type="number" id="pos-z" placeholder="Z" value="0" step="1">
+                        <button id="move-btn">Move</button>
+                    </div>
+                </div>
+                <div>
+                    <h3>Actions</h3>
+                    <div class="input-group">
+                        <select id="action-type">
+                            <option value="jump">Jump</option>
+                            <option value="attack">Attack</option>
+                        </select>
+                        <button id="action-btn">Perform Action</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="chat-tab" class="tab-content">
+        <div class="container">
+            <div class="panel">
+                <h2>Chat</h2>
+                <div>
+                    <h3>Global Chat</h3>
+                    <div id="global-chat" class="chat-area"></div>
+                    <div class="input-group">
+                        <input type="text" id="global-message" placeholder="Type a message...">
+                        <button id="send-global-btn">Send</button>
+                    </div>
+                </div>
+                <div>
+                    <h3>Private Chat</h3>
+                    <div class="input-group">
+                        <input type="text" id="recipient-id" placeholder="Recipient ID">
+                    </div>
+                    <div id="private-chat" class="chat-area"></div>
+                    <div class="input-group">
+                        <input type="text" id="private-message" placeholder="Type a message...">
+                        <button id="send-private-btn">Send</button>
+                    </div>
+                </div>
+                <div>
+                    <h3>Channels</h3>
+                    <div class="input-group">
+                        <input type="text" id="channel-id" placeholder="Channel ID">
+                        <button id="join-channel-btn">Join</button>
+                        <button id="leave-channel-btn">Leave</button>
+                    </div>
+                    <div id="channel-chat" class="chat-area"></div>
+                    <div class="input-group">
+                        <input type="text" id="channel-message" placeholder="Type a message...">
+                        <button id="send-channel-btn">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="world-tab" class="tab-content">
+        <div class="container">
+            <div class="panel">
+                <h2>World Interaction</h2>
+                <div>
+                    <h3>World State</h3>
+                    <button id="request-world-state-btn">Request World State</button>
+                </div>
+                <div>
+                    <h3>Object Interaction</h3>
+                    <div class="input-group">
+                        <input type="text" id="object-id" placeholder="Object ID">
+                        <select id="interaction-type">
+                            <option value="pickup">Pickup</option>
+                            <option value="use">Use</option>
+                            <option value="activate">Activate</option>
+                        </select>
+                        <button id="interact-btn">Interact</button>
+                    </div>
+                </div>
+                <div>
+                    <h3>Entity Creation</h3>
+                    <div class="input-group">
+                        <select id="entity-type">
+                            <option value="item">Item</option>
+                            <option value="npc">NPC</option>
+                            <option value="obstacle">Obstacle</option>
+                        </select>
+                        <button id="create-entity-btn">Create Entity</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Socket.IO client library -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    
+    <!-- Import original test scripts -->
+    <script type="module" src="/test/ecs-test.js"></script>
+    <script type="module" src="/test/socket-test.js"></script>
+</body>
+</html>

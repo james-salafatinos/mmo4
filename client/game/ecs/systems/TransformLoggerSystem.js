@@ -1,4 +1,4 @@
-import { System } from '../core/system.js';
+import { System } from '/shared/core/system.js';
 
 export class TransformLoggerSystem extends System {
     constructor() {
